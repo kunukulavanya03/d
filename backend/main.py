@@ -1,14 +1,63 @@
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
-from fastapi.requests import Request
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from passlib.context import CryptContext
-from jose import jwt, JWTError
-from datetime import datetime, timedelta
+from sqlalchemy.orm import Session
+from database import get_db, engine
+from models import Base, User, Item
+from schemas import UserCreate, UserResponse, ItemCreate, ItemResponse
+import logging
 
-#... rest of the main.py code...
+# Create tables
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(
+    title="Backend_Api_For_D,_A_React-Based_Application._The_Api_Will_Provide_Data_Storage_And_Retrieval_Functionality_For_The_Frontend,_Using_Fastapi_And_Sqlalchemy. API",
+    description="Complete backend API",
+    version="1.0.0"
+)
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to Backend_Api_For_D,_A_React-Based_Application._The_Api_Will_Provide_Data_Storage_And_Retrieval_Functionality_For_The_Frontend,_Using_Fastapi_And_Sqlalchemy. API", "status": "running"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "backend_api_for_d,_a_react-based_application._the_api_will_provide_data_storage_and_retrieval_functionality_for_the_frontend,_using_fastapi_and_sqlalchemy."}
+
+@app.post("/users/", response_model=UserResponse)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = User(email=user.email, username=user.username)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+@app.get("/users/", response_model=list[UserResponse])
+def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    users = db.query(User).offset(skip).limit(limit).all()
+    return users
+
+@app.post("/items/", response_model=ItemResponse)
+def create_item(item: ItemCreate, db: Session = Depends(get_db)):
+    db_item = Item(**item.dict())
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+@app.get("/items/", response_model=list[ItemResponse])
+def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    items = db.query(Item).offset(skip).limit(limit).all()
+    return items
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
