@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "./utils";
+import { createLogin, updateProfile, login, createRegister, getUsers{username}, register, createPassword_reset, getUsers, logout, getProfile } from './services/api';
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
