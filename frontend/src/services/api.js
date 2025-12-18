@@ -68,24 +68,24 @@ export const api_login = async (data) => {
   const response = await api.post('/api/login', data);
   return response.data;
 };
-export const api_data = async (params = {}) => {
-  const response = await api.get('/api/data', { params });
+export const api_password_reset = async (data) => {
+  const response = await api.post('/api/password_reset', data);
   return response.data;
 };
-export const api_data = async (data) => {
-  const response = await api.post('/api/data', data);
+export const api_profile = async (params = {}) => {
+  const response = await api.get('/api/profile', { params });
   return response.data;
 };
-export const api_data_{id} = async (id, data) => {
-  const response = await api.put(`/api/data/{id}/${id}`, data);
+export const api_profile = async (id, data) => {
+  const response = await api.put(`/api/profile/${id}`, data);
   return response.data;
 };
-export const api_data_{id} = async (id) => {
-  const response = await api.delete(`/api/data/{id}/${id}`);
+export const api_users = async (params = {}) => {
+  const response = await api.get('/api/users', { params });
   return response.data;
 };
-export const api_data_search = async (params = {}) => {
-  const response = await api.get('/api/data/search', { params });
+export const api_users_{username} = async (params = {}) => {
+  const response = await api.get('/api/users/{username}', { params });
   return response.data;
 };
 
