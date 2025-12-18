@@ -1,17 +1,16 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+import models
+import schemas
 from database import get_db, engine
-from models import Base, User, Item
-from schemas import UserCreate, UserResponse, ItemCreate, ItemResponse
-import logging
 
 # Create tables
-Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Backend_Api_For_D,_A_React-Based_Application._The_Api_Will_Provide_Data_Storage_And_Retrieval_Functionality_For_The_Frontend,_Using_Fastapi_And_Sqlalchemy. API",
-    description="Complete backend API",
+    title="Backend_Api_For_D API",
+    description="Generated from Impact Analysis specifications",
     version="1.0.0"
 )
 
@@ -25,38 +24,211 @@ app.add_middleware(
 )
 
 @app.get("/")
-def read_root():
-    return {"message": "Welcome to Backend_Api_For_D,_A_React-Based_Application._The_Api_Will_Provide_Data_Storage_And_Retrieval_Functionality_For_The_Frontend,_Using_Fastapi_And_Sqlalchemy. API", "status": "running"}
+def root():
+    return {
+        "message": "API is running",
+        "endpoints": 20,
+        "models": 7
+    }
 
 @app.get("/health")
-def health_check():
-    return {"status": "healthy", "service": "backend_api_for_d,_a_react-based_application._the_api_will_provide_data_storage_and_retrieval_functionality_for_the_frontend,_using_fastapi_and_sqlalchemy."}
+def health():
+    return {"status": "healthy", "service": "backend_api_for_d"}
 
-@app.post("/users/", response_model=UserResponse)
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    db_user = User(email=user.email, username=user.username)
-    db.add(db_user)
+# Generated API endpoints
+@app.get("/users")
+def users(db: Session = Depends(get_db)):
+    # Get all items
+    items = db.query(models.Users).all()
+    return {"items": items, "total": len(items)}
+
+@app.post("/users")
+def users(item_data: schemas.UsersCreate, db: Session = Depends(get_db)):
+    # Create new item
+    new_item = models.Users(**item_data.dict())
+    db.add(new_item)
     db.commit()
-    db.refresh(db_user)
-    return db_user
+    db.refresh(new_item)
+    return new_item
 
-@app.get("/users/", response_model=list[UserResponse])
-def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    users = db.query(User).offset(skip).limit(limit).all()
-    return users
+@app.get("/users/{id}")
+def users_id(id: int, db: Session = Depends(get_db)):
+    # Get single item by ID
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return item
 
-@app.post("/items/", response_model=ItemResponse)
-def create_item(item: ItemCreate, db: Session = Depends(get_db)):
-    db_item = Item(**item.dict())
-    db.add(db_item)
+@app.put("/users/{id}")
+def users_id(id: int, item_data: schemas.UsersCreate, db: Session = Depends(get_db)):
+    # Update item
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    for key, value in item_data.dict().items():
+        setattr(item, key, value)
+    
     db.commit()
-    db.refresh(db_item)
-    return db_item
+    db.refresh(item)
+    return item
 
-@app.get("/items/", response_model=list[ItemResponse])
-def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    items = db.query(Item).offset(skip).limit(limit).all()
-    return items
+@app.delete("/users/{id}")
+def users_id(id: int, db: Session = Depends(get_db)):
+    # Delete item
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    db.delete(item)
+    db.commit()
+    return {"message": "Item deleted successfully"}
+
+@app.get("/products")
+def products(db: Session = Depends(get_db)):
+    # Get all items
+    items = db.query(models.Users).all()
+    return {"items": items, "total": len(items)}
+
+@app.post("/products")
+def products(item_data: schemas.UsersCreate, db: Session = Depends(get_db)):
+    # Create new item
+    new_item = models.Users(**item_data.dict())
+    db.add(new_item)
+    db.commit()
+    db.refresh(new_item)
+    return new_item
+
+@app.get("/products/{id}")
+def products_id(id: int, db: Session = Depends(get_db)):
+    # Get single item by ID
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return item
+
+@app.put("/products/{id}")
+def products_id(id: int, item_data: schemas.UsersCreate, db: Session = Depends(get_db)):
+    # Update item
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    for key, value in item_data.dict().items():
+        setattr(item, key, value)
+    
+    db.commit()
+    db.refresh(item)
+    return item
+
+@app.delete("/products/{id}")
+def products_id(id: int, db: Session = Depends(get_db)):
+    # Delete item
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    db.delete(item)
+    db.commit()
+    return {"message": "Item deleted successfully"}
+
+@app.get("/orders")
+def orders(db: Session = Depends(get_db)):
+    # Get all items
+    items = db.query(models.Users).all()
+    return {"items": items, "total": len(items)}
+
+@app.post("/orders")
+def orders(item_data: schemas.UsersCreate, db: Session = Depends(get_db)):
+    # Create new item
+    new_item = models.Users(**item_data.dict())
+    db.add(new_item)
+    db.commit()
+    db.refresh(new_item)
+    return new_item
+
+@app.get("/orders/{id}")
+def orders_id(id: int, db: Session = Depends(get_db)):
+    # Get single item by ID
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return item
+
+@app.put("/orders/{id}")
+def orders_id(id: int, item_data: schemas.UsersCreate, db: Session = Depends(get_db)):
+    # Update item
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    for key, value in item_data.dict().items():
+        setattr(item, key, value)
+    
+    db.commit()
+    db.refresh(item)
+    return item
+
+@app.delete("/orders/{id}")
+def orders_id(id: int, db: Session = Depends(get_db)):
+    # Delete item
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    db.delete(item)
+    db.commit()
+    return {"message": "Item deleted successfully"}
+
+@app.get("/payments")
+def payments(db: Session = Depends(get_db)):
+    # Get all items
+    items = db.query(models.Users).all()
+    return {"items": items, "total": len(items)}
+
+@app.post("/payments")
+def payments(item_data: schemas.UsersCreate, db: Session = Depends(get_db)):
+    # Create new item
+    new_item = models.Users(**item_data.dict())
+    db.add(new_item)
+    db.commit()
+    db.refresh(new_item)
+    return new_item
+
+@app.get("/payments/{id}")
+def payments_id(id: int, db: Session = Depends(get_db)):
+    # Get single item by ID
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return item
+
+@app.put("/payments/{id}")
+def payments_id(id: int, item_data: schemas.UsersCreate, db: Session = Depends(get_db)):
+    # Update item
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    for key, value in item_data.dict().items():
+        setattr(item, key, value)
+    
+    db.commit()
+    db.refresh(item)
+    return item
+
+@app.delete("/payments/{id}")
+def payments_id(id: int, db: Session = Depends(get_db)):
+    # Delete item
+    item = db.query(models.Users).filter(models.Users.id == id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    db.delete(item)
+    db.commit()
+    return {"message": "Item deleted successfully"}
+
+
 
 if __name__ == "__main__":
     import uvicorn
