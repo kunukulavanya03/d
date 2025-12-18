@@ -1,6 +1,7 @@
 import { ArrowLeft, ShoppingCart, Package, Heart, User, Bell, Settings, TrendingUp } from 'lucide-react';
 import { Order, Product } from '../App';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { createLogin, updateProfile, login, createRegister, getUsers{username}, register, createPassword_reset, getUsers, logout, getProfile } from './services/api';
 
 interface UserAccountProps {
   orders: Order[];
