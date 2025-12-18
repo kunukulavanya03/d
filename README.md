@@ -6,7 +6,7 @@ Backend API for d
 
 - **Frontend**: React
 - **Backend**: FastAPI + SQLAlchemy
-- **Frontend Source**: GitHub ([Repository](https://github.com/HimaShankarReddyEguturi/Hotelbookinguidesign.git))
+- **Frontend Source**: GitHub ([Repository](https://github.com/HimaShankarReddyEguturi/Designecommerceproductui.git))
 
 ## Project Structure
 
@@ -43,19 +43,21 @@ cd backend
 
 ## Features
 
-- data storage
-- data retrieval
-- search functionality
+- User registration
+- User login
+- Password reset
+- User profile management
+- User listing
 
 ## API Endpoints
 
-- `POST /api/register` - Create a new user account.
-- `POST /api/login` - Log in to an existing user account.
-- `GET /api/data` - Retrieve a list of all user data.
-- `POST /api/data` - Create new data.
-- `PUT /api/data/{id}` - Edit existing data.
-- `DELETE /api/data/{id}` - Delete data.
-- `GET /api/data/search` - Search for data by keyword.
+- `POST /api/register` - Register a new user
+- `POST /api/login` - Log in a user
+- `POST /api/password_reset` - Reset a user's password
+- `GET /api/profile` - Get a user's profile information
+- `PUT /api/profile` - Update a user's profile information
+- `GET /api/users` - Get a list of all users
+- `GET /api/users/{username}` - Get a specific user's profile information
 
 ## License
 
