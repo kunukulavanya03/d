@@ -35,14 +35,14 @@ class UsersResponse(UsersBase):
     class Config:
         from_attributes = True
 
-class ProductsBase(BaseModel):
+class HotelsBase(BaseModel):
     name: str
     description: Optional[str] = None
 
-class ProductsCreate(ProductsBase):
+class HotelsCreate(HotelsBase):
     pass
 
-class ProductsResponse(ProductsBase):
+class HotelsResponse(HotelsBase):
     id: int
     created_at: datetime
     updated_at: datetime
@@ -50,29 +50,14 @@ class ProductsResponse(ProductsBase):
     class Config:
         from_attributes = True
 
-class OrdersBase(BaseModel):
+class BookingsBase(BaseModel):
     name: str
     description: Optional[str] = None
 
-class OrdersCreate(OrdersBase):
+class BookingsCreate(BookingsBase):
     pass
 
-class OrdersResponse(OrdersBase):
-    id: int
-    created_at: datetime
-    updated_at: datetime
-    
-    class Config:
-        from_attributes = True
-
-class PaymentsBase(BaseModel):
-    name: str
-    description: Optional[str] = None
-
-class PaymentsCreate(PaymentsBase):
-    pass
-
-class PaymentsResponse(PaymentsBase):
+class BookingsResponse(BookingsBase):
     id: int
     created_at: datetime
     updated_at: datetime
@@ -88,6 +73,21 @@ class DataCreate(DataBase):
     pass
 
 class DataResponse(DataBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+class SuiBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+
+class SuiCreate(SuiBase):
+    pass
+
+class SuiResponse(SuiBase):
     id: int
     created_at: datetime
     updated_at: datetime
