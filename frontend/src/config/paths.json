@@ -1,0 +1,45 @@
+{
+  "api": {
+    "base": "/api",
+    "version": "v1",
+    "endpoints": {
+      "register": {
+        "post": "/api/register"
+      },
+      "login": {
+        "post": "/api/login"
+      },
+      "profile": {
+        "get": "/api/profile",
+        "put": "/api/profile"
+      },
+      "data": {
+        "post": "/api/data",
+        "get": "/api/data/{id}",
+        "put": "/api/data/{id}",
+        "delete": "/api/data/{id}"
+      },
+      "search": {
+        "get": "/api/search"
+      }
+    }
+  },
+  "routes": {
+    "auth": {
+      "login": "/login",
+      "register": "/register",
+      "logout": "/logout",
+      "profile": "/profile"
+    },
+    "app": {
+      "home": "/",
+      "dashboard": "/dashboard",
+      "settings": "/settings"
+    }
+  },
+  "assets": {
+    "images": "/assets/images",
+    "icons": "/assets/icons",
+    "styles": "/assets/styles"
+  }
+}
