@@ -1,37 +1,32 @@
-# Backend_Api_For_D API
+# Backend_Api_For_D,_A_React-Based_Frontend_Application._The_Api_Will_Provide_Data_Storage,_Retrieval,_And_Manipulation_Functionality_Using_Fastapi_And_Sqlalchemy. API
 
 Generated from Impact Analysis specifications.
 
 ## Endpoints
 
-- GET /users
-- POST /users
-- GET /users/{id}
-- PUT /users/{id}
-- DELETE /users/{id}
-- GET /products
-- POST /products
-- GET /products/{id}
-- PUT /products/{id}
-- DELETE /products/{id}
-- GET /orders
-- POST /orders
-- GET /orders/{id}
-- PUT /orders/{id}
-- DELETE /orders/{id}
-- GET /payments
-- POST /payments
-- GET /payments/{id}
-- PUT /payments/{id}
-- DELETE /payments/{id}
+- GET /api/users
+- GET /api/users/{id}
+- POST /api/users
+- PUT /api/users/{id}
+- DELETE /api/users/{id}
+- GET /api/hotels
+- GET /api/hotels/{id}
+- POST /api/hotels
+- PUT /api/hotels/{id}
+- DELETE /api/hotels/{id}
+- GET /api/bookings
+- GET /api/bookings/{id}
+- POST /api/bookings
+- PUT /api/bookings/{id}
+- DELETE /api/bookings/{id}
 
 ## Models
 
 - Users
-- Products
-- Orders
-- Payments
+- Hotels
+- Bookings
 - Data
+- Sui
 - Database
 - Create
 
