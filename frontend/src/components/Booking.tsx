@@ -1,43 +1,36 @@
+import React, { useState } from 'react';
 import { useState } from 'react';
 import { Calendar, Users, Bed, Check, MapPin, Star, Wifi, Coffee, Dumbbell, ParkingCircle, UtensilsCrossed, MessageCircle } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { login, register, logout } from './services/api';
-
+import { getData, createData, getSearch, logout, getProfile, deleteData{id}, login, createLogin, updateProfile, createRegister } from './services/api';
 interface BookingProps {
   hotel: any;
   onNavigate: (booking: any) => void;
 }
-
 export function Booking({ hotel, onNavigate }: BookingProps) {
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState(1);
+  const [rooms, setrooms] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // TODO: Replace with actual API endpoint
-        const data = await api.get('/api/items');
-        // Update state with fetched data
+        setLoading(true);
+        const data = await getItems();
+        setData(data);
+        setError(null);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
     
     fetchData();
   }, []);
-
-
-  const rooms = [
-    {
-      id: 'deluxe',
-      name: 'Deluxe Room',
-      description: 'Spacious room with city view, king bed, and modern amenities',
-      price: hotel?.price || 249,
-      capacity: 2,
-      size: '35 m²',
-      features: ['King Bed', 'City View', 'Work Desk', 'Mini Bar']
-    },
+},
     {
       id: 'suite',
       name: 'Executive Suite',
@@ -57,9 +50,7 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
       features: ['Queen Bed', 'Garden View', 'Shower', 'TV']
     },
   ];
-
   const handleBooking = () => {
-    const selectedRoomData = rooms.find(r => r.id === selectedRoom);
     onNavigate({
       hotel: hotel?.name || 'Grand Plaza Hotel',
       room: selectedRoomData,
@@ -69,7 +60,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
       totalPrice: selectedRoomData?.price || 249
     });
   };
-
   return (
     <div className="min-h-screen pb-12">
       {/* Hotel Header Banner */}
@@ -104,7 +94,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
           </div>
         </div>
       </div>
-
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Room Selection */}
@@ -117,7 +106,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
                 className="w-full h-96 object-cover"
               />
             </div>
-
             {/* Amenities Section */}
             <div>
               <div 
@@ -155,7 +143,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
                 </div>
               </div>
             </div>
-
             {/* Room Selection */}
             <div>
               <div 
@@ -227,7 +214,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
               </div>
             </div>
           </div>
-
           {/* Right Column - Booking Form */}
           <div className="lg:col-span-1">
             <div 
@@ -238,7 +224,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
               }}
             >
               <h2 className="text-white mb-6">Complete Your Booking</h2>
-
               <div className="space-y-4 mb-6">
                 <div>
                   <label className="text-white mb-2 block">Check-in Date</label>
@@ -252,7 +237,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
                     />
                   </div>
                 </div>
-
                 <div>
                   <label className="text-white mb-2 block">Check-out Date</label>
                   <div className="relative">
@@ -265,7 +249,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
                     />
                   </div>
                 </div>
-
                 <div>
                   <label className="text-white mb-2 block">Number of Guests</label>
                   <div className="relative">
@@ -283,7 +266,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
                   </div>
                 </div>
               </div>
-
               {/* Price Summary */}
               {selectedRoom && (
                 <div className="p-4 rounded-xl bg-white/10 mb-6">
@@ -302,7 +284,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
                   </div>
                 </div>
               )}
-
               <button
                 onClick={handleBooking}
                 disabled={!selectedRoom || !checkIn || !checkOut}
@@ -311,7 +292,6 @@ export function Booking({ hotel, onNavigate }: BookingProps) {
               >
                 Proceed to Payment
               </button>
-
               {/* Help */}
               <div className="mt-6 p-4 rounded-xl bg-white/10">
                 <div className="flex items-center gap-2 mb-2">
