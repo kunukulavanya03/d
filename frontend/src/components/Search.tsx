@@ -1,40 +1,15 @@
+import React, { useState } from 'react';
 import { useState } from 'react';
 import { Search as SearchIcon, MapPin, Calendar, Users, Star, Wifi, Coffee, Dumbbell, Filter, SlidersHorizontal } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { login, register, logout } from './services/api';
-
+import { getData, createData, getSearch, logout, getProfile, deleteData{id}, login, createLogin, updateProfile, createRegister } from './services/api';
 interface SearchProps {
   onNavigate: (hotel: any) => void;
 }
-
 export function Search({ onNavigate }: SearchProps) {
   const [searchLocation, setSearchLocation] = useState('New York');
   const [activeFilter, setActiveFilter] = useState('All');
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // TODO: Replace with actual API endpoint
-        const data = await api.get('/api/items');
-        // Update state with fetched data
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    
-    fetchData();
-  }, []);
-
-
-  const hotels = [
-    {
-      id: 1,
-      name: 'Grand Plaza Hotel',
-      location: 'Manhattan, New York',
-      rating: 4.8,
-      reviews: 320,
-      price: 249,
-      image: 'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGxvYmJ5fGVufDF8fHx8MTc2NTQyNDcwNXww&ixlib=rb-4.1.0&q=80&w=1080',
-      amenities: ['Wifi', 'Pool', 'Gym', 'Restaurant'],
+  const [hotels, sethotels] = useState([]);,
       available: 5
     },
     {
@@ -71,8 +46,24 @@ export function Search({ onNavigate }: SearchProps) {
       available: 8
     },
   ];
-
-  const filters = ['All', 'Luxury', 'Budget', 'Business', 'Boutique'];
+  const [filters, setfilters] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await getItems();
+        setData(data);
+        setError(null);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
 
   return (
     <div className="min-h-screen pb-12">
@@ -88,7 +79,6 @@ export function Search({ onNavigate }: SearchProps) {
           <h1 className="text-white mb-8" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
             Find Your Perfect Stay
           </h1>
-
           {/* Search Bar */}
           <div className="bg-white rounded-2xl p-6 shadow-2xl">
             <div className="grid md:grid-cols-4 gap-4">
@@ -140,7 +130,6 @@ export function Search({ onNavigate }: SearchProps) {
           </div>
         </div>
       </div>
-
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Filter Chips */}
@@ -164,7 +153,6 @@ export function Search({ onNavigate }: SearchProps) {
             </button>
           ))}
         </div>
-
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-gray-800">
@@ -177,7 +165,6 @@ export function Search({ onNavigate }: SearchProps) {
             <span className="text-gray-700">More Filters</span>
           </button>
         </div>
-
         {/* Hotel Cards Grid */}
         <div className="grid md:grid-cols-2 gap-6">
           {hotels.map((hotel) => (
@@ -229,7 +216,6 @@ export function Search({ onNavigate }: SearchProps) {
                   </div>
                 </div>
               </div>
-
               {/* Hotel Details */}
               <div 
                 className="p-6"
@@ -249,7 +235,6 @@ export function Search({ onNavigate }: SearchProps) {
                     <span className="text-white opacity-80">/night</span>
                   </div>
                 </div>
-
                 {/* Amenities */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {hotel.amenities.map((amenity, index) => (
@@ -262,7 +247,6 @@ export function Search({ onNavigate }: SearchProps) {
                     </span>
                   ))}
                 </div>
-
                 {/* View Details Button */}
                 <button 
                   className="w-full py-3 rounded-xl text-white transition-all duration-300 hover:shadow-xl"
